@@ -15,6 +15,8 @@
   <meta name="mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black">
   <meta name="apple-mobile-web-app-title" content="FIUSAC (Helper)">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="">
+  <link rel="preconnect" href="https://cdnjs.cloudflare.com" crossorigin="">
   <link rel="manifest" href="./manifest.json">
   <link rel="icon" type="image/png" href="./img/icon.png">
   <link rel="favicon" type="image/png" href="./img/icon.png">
@@ -30,9 +32,27 @@
   <meta property="og:site_name" content="FIUSAC (Helper)"/>
   <meta property="og:type" content="website" />
   <meta property="fb:app_id" content="1342183889264144" />
-  <!--<script src="//cdn.jsdelivr.net/npm/eruda"></script>-->
+  <script src="//cdn.jsdelivr.net/npm/eruda"></script>
+  </script>
 </head>
-<body style="--primary:#2196F3;--secondary:#673AB7">
+<body style="--primary:#555;--secondary:#333">
+<script>
+    //Set main colors
+    const setColor = () =>{
+   		let pr = window.localStorage.getItem("primary");
+   		let sc = window.localStorage.getItem("secondary");
+   		document.body.style.cssText=`--primary:${pr};--secondary:${sc}`;
+   		let metaThemeColor = document.querySelector("meta[name=theme-color]");
+   		metaThemeColor.setAttribute("content",pr);
+    } 
+  	const updateColor = (primary, secondary) =>{
+  		window.localStorage.setItem("primary", primary) ;
+  		window.localStorage.setItem("secondary", secondary) ;
+		setColor();
+  	}	
+  	if(window.localStorage.getItem("primary") == null && window.localStorage.getItem("secondary") == null) updateColor("#2196F3", "#673AB7");
+  	else setColor();
+</script>
 <!-- MAIN UI -->	
 	<nav>
 		<div class="nav-wrapper">
@@ -118,13 +138,19 @@
 		</li>
 	</ul> 
 	<div class="nav-icon"><div></div></div>
-<!-- UI INTERACTION -->
+<!-- USER INTERACTION -->
 	<div class="progress">
 			<div class="indeterminate"></div>
 	</div>
-	<a role="button" class="action waves-effect darken-5 z-depth-5">
-    	<i class="material-icons">add</i>
-  	</a>
+	<div class="fixed-action-btn action ">
+		<a class="btn-floating btn-large waves-effect">
+			<i class="large material-icons">add</i>
+		</a>
+	<ul>
+		<li><a class="btn-floating"><i class="material-icons">color_lens</i></a></li>
+		<li><a class="btn-floating"><i class="material-icons">email</i></a></li>
+     </ul>
+	</div>
   	<div id="searchShadow"></div>
 <!-- RENDER -->
 	<main id="app">

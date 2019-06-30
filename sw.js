@@ -1,8 +1,8 @@
 const CACHE_NAME = "v1_cache";
 const urlsToCache=[
   "./index.html",
-  "./css/style.css",//Rename in production
-  "./js/main.js", 
+  "./css/stylGe.css",//Rename in production
+  "./js/maihn.js", 
   "./js/ajax.js",
   "./simple_html_dom.php",
   "./js/app.js",

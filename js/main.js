@@ -57,10 +57,8 @@ if (navigator.share) {
 }
 }) 
 //Toolbar
-var btn = document.querySelector('.fixed-action-btn');
-var instances = M.FloatingActionButton.init(btn, {
-  toolbarEnabled: true
-});
+var btn = document.querySelectorAll('.fixed-action-btn');
+var instances = M.FloatingActionButton.init(btn);
 //Navigations
 const side = () => navicon.click();
 let navToggle = true;
@@ -117,7 +115,7 @@ function addEvents() {
 	}
 } 
 //Developer
-//eruda.init()
+eruda.init()
 // Search
 let searchAll = document.querySelector(".search");
 let shadow = document.getElementById("searchShadow");
@@ -125,4 +123,18 @@ let shadow = document.getElementById("searchShadow");
 searchAll.addEventListener("click", () =>{
 	shadow.style.display="block";
 	setTimeout(() => shadow.style.opacity=1, 10)
-}) 
+})
+
+function getRandomRGBValue() {
+    return Math.min(Math.floor(Math.random() * 255 + 1), 255);
+}
+
+function getR() {
+    var r = getRandomRGBValue(),
+        g = getRandomRGBValue(),
+        b = getRandomRGBValue();
+    return "#" + (((1 << 24) + (r << 16) + (g << 8) + b).toString(16).slice(1));
+}
+
+//Color splash
+//setInterval(() => updateColor(getR(), getR()), 2000);
