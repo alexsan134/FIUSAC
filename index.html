@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <title>FIUSAC (Helper)</title>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=Edge">
+  <meta name="keywords" content="education, homeworks, university, usac, USAC, ingeniería, u, universidad, fiusac, facultad, de, ingenieria, semestre, ingreso, primer">
+  <meta name="Author" content="AlexSantos">
+  <meta name="Robots" content="follow">
+  <meta name="description" content="This portal is an OpenSource app for upload homeworks, docs, and share education content, it's built from students to students.">
+  <meta name="MobileOptimized" content="yes">
+  <meta name="HandheldFriendly" content="yes">
+  <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+  <meta name="theme-color" content="#2196F3">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+  <meta name="apple-mobile-web-app-title" content="FIUSAC (Helper)">
+  <link rel="manifest" href="./manifest.json">
+  <link rel="icon" type="image/png" href="./img/icon.png">
+  <link rel="favicon" type="image/png" href="./img/icon.png">
+  <link rel="apple-touch-icon" href="./img/icon.png" />
+  <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto&display=swap">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
+  <link rel="stylesheet" href="./css/style.css">
+  <meta property="og:title" content="FIUSAC (Helper)" />
+  <meta property="og:description" content="This portal is an OpenSource app for upload homeworks, docs, and share education content, it's built from students to students." />
+  <meta property="og:image" content="https://alexsan134.github.io/PowerPen/img/banner3.jpg" />      
+  <meta property="og:url" content="https://alexsan134.github.io/PowerPen" />
+  <meta property="og:site_name" content="FIUSAC (Helper)"/>
+  <meta property="og:type" content="website" />
+  <meta property="fb:app_id" content="1342183889264144" />
+  <!--<script src="//cdn.jsdelivr.net/npm/eruda"></script>-->
+</head>
+<body style="--primary:#2196F3;--secondary:#673AB7">
+<!-- MAIN UI -->	
+	<nav>
+		<div class="nav-wrapper">
+			<a href="#" class="brand-logo center">
+				<img src="./img/fiusac.png">
+				<span>FIUSAC </span>
+				<span class="bold">(Helper)</span>
+			</a>
+			<ul id="nav-mobile" class="right hide-on-med-and-down">
+				<li><a href="#!/app">Información</a></li>
+				<li><a href="#!/noticias">Noticias</a></li>
+				<li><a href="#!/recursos">Recursos</a></li>
+			</ul>			
+			<div class="input-field search">
+				<input id="search" type="search" required>
+				<label class="label-icon" for="search"><i class="material-icons">search</i></label>
+				<i class="material-icons">close</i>
+			</div>			
+		</div>
+	</nav>
+	<ul class="sidenav">
+		<li>
+			<div class="user-view">
+				<div class="background">
+					<img src="./img/sidenav.jpg">
+				</div> 
+				<a role="button">
+					<img class="circle" src="./img/fiusac.png">
+				</a>
+				<a role="button" class="userInfo">
+					<span class="name bold">FIUSAC (Helper)</span>
+					<span class="email white-text">AlexSantos 2019®</span>
+				</a>
+			</div>
+		</li>
+		<li class="sBtn homeBtn active">
+			<a role="button" href="#app" class="waves-effect">
+				<i class="material-icons">info</i>Información
+			</a>
+		</li>
+		<li class="sBtn feedsBtn">
+			<a role="button" class="waves-effect">
+				<i class="material-icons">event_note</i>Noticias
+			</a>
+		</li>
+		<li class="sBtn resBtn">
+			<a role="button" class="waves-effect">
+				<i class="material-icons">import_contacts</i>Recursos
+			</a>
+		</li>
+		<li>
+			<div class="divider"></div>
+		</li>
+		<li>
+			<a class="subheader">Applicación</a>
+		</li> 
+	<div id="accountSection">
+		<li>
+			<a role="button" class="waves-effect">
+				<i class="material-icons">settings</i>Configuracion
+			</a>
+		</li>	
+		<li>
+			<a role="button" id="logout" class="waves-effect">
+				<i class="material-icons">logout</i>Cerrar sesión
+			</a>
+		</li>
+	</div>
+		<li class='login'>
+			<a role="button" id="login" class="waves-effect">
+				<i class="material-icons">person</i>Iniciar sesión
+			</a>
+		</li>
+		<li class="shareBtn" >
+			<a role="button">
+				<i class="material-icons">share</i>Compartir
+			</a>
+		</li>
+		<li class="download">
+			<a role="button" class="waves-effect add-button">
+				<i class="material-icons">arrow_downward</i>Descargar app
+			</a>
+		</li>
+	</ul> 
+	<div class="nav-icon"><div></div></div>
+<!-- UI INTERACTION -->
+	<div class="progress">
+			<div class="indeterminate"></div>
+	</div>
+	<a role="button" class="action waves-effect darken-5 z-depth-5">
+    	<i class="material-icons">add</i>
+  	</a>
+  	<div id="searchShadow"></div>
+<!-- RENDER -->
+	<main id="app">
+		<router-link to="/noticias"><a class="rFeed"></a></router-link>
+		<router-link to="/recursos"><a class="rRes"></a></router-link>	
+		<router-view></router-view>
+	</main>
+<!-- SEARCH BOX -->
+	<section id="searchBox" class="ct" style="display:none">
+		<div class="banner">
+			<h5 style="font-weight:bold;color:#000;margin:0;">
+				<i class="material-icons">info_outline</i> Resultados de búsqueda</h5>
+			<p>Aqui se mostrarán los resultados de relacionados con <span id="searchKeyword"></span> obtenidos del <a href="ingenieria.usac.edu.gt">Departamento de matemática</a></p>
+		</div>
+	</section>	
+<!-- SCRIPTS -->
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/vue/2.6.10/vue.min.js"></script>
+  	<script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+  	<script src="https://cdnjs.cloudflare.com/ajax/libs/vue-router/3.0.6/vue-router.min.js"></script>
+  	<script src="./js/ajax.js"></script>
+  	<script src="./js/app.js"></script>
+  	<script src="./js/main.js"></script>
+</body>
+</html>
