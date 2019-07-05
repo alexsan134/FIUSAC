@@ -1,16 +1,14 @@
 /*Environment*/
-html{
-  overflow:auto;
-} 
+
 *{
   font-family: 'Roboto', Roboto, sans-serif;
- /* -moz-user-select:none;
+   -moz-user-select:none;
   -ms-user-select: none; 
   -khtml-user-select: none; 
   -webkit-user-select: none;
   -webkit-touch-callout: none; 
   -webkit-tap-highlight-color:transparent;
-  -webkit-user-drag:none;*/
+  -webkit-user-drag:none;
 }
 
 @keyframes ent{
@@ -27,8 +25,7 @@ html{
 }
 body{
   background:#eee;
-  
-  
+  overflow-x:hidden!important;
 }
 ::selection {
  background:var(--primary);
@@ -37,8 +34,9 @@ body{
 }
 .drag-target{
   width:30px!important;
+  z-index:996;
 }
-.progress{
+#mainLoader{
   opacity:0;
   position:fixed;
   z-index:12;
@@ -48,7 +46,7 @@ body{
   height:2px;
   transition:opacity 0.2s ease-out;
 }
-.progress .indeterminate{
+#mainLoader .indeterminate{
   background:#fff;
 } 
 .action{
@@ -97,7 +95,108 @@ body{
  background: var(--primary) ;
  color: white;
  text-shadow: 1px 1px #fff;
- }
+}
+
+
+/* Mail Box */
+#mailBox{
+  position:fixed;
+  width:100%;
+  top:0;
+  left:0;
+  height:100vh;
+  z-index:12;
+  display:none;
+  opacity:0;
+  transition:opacity 0.3s ease;
+}
+#mailBox .boxed{
+  position:absolute;
+  left:5%;
+  top:45.3%;
+  transform:translateY(-50%);
+  width:90%;
+  padding:15px 25px 3px 25px;
+  line-height:16px;
+  border-radius:5px;
+  background:#fff;
+  box-shadow:0 0 10px rgba(0,0,0,.3);
+  z-index:2;
+}
+#mailBox .sendBtn{
+  position:absolute;
+  bottom:-27px;
+  right:-10px;
+  padding:20px;
+  padding-bottom:17px;
+  border-radius:500px;
+  color:#fff;
+  background:var(--primary);
+  box-shadow:0 0 10px rgba(0,0,0,.2);
+}
+#mailBox .sendBtn i{
+  font-size:1.5em;
+} 
+#mailBox #shadowS{
+  content:'';
+  position:absolute;
+  top:0;
+  left:0;
+  width:100%;
+  height:100vh;
+  z-index:-1;
+  background:rgba(0,0,0,.4);
+} 
+#mailBox h5{
+  position:relative;
+  color:#fff;
+  background:#888;
+  display:inline-block;
+  padding:7px 25px 15px 25px;
+  font-size:1.2em;
+  border-radius:5px;
+  box-shadow:0 0 10px rgba(0,0,0,.2);
+  left:50%;
+  transform:translateX(-50%);
+  margin-bottom:15px;
+}
+#mailBox h5 i{
+  position:relative;
+  top:6px;
+}
+@keyframes error{
+  0%{margin-left:0px;margin-right:0;}
+  25%{margin-right:-5px;margin-left:0;}
+  50%{margin-right:0px;margin-left:-5px;}
+  75%{margin-right:-5px;margin-left:0;}
+  100%{margin-right:0px;margin-left:0px;}
+}
+#textarea1{
+   height :42px;
+} 
+#emailS{
+  margin-bottom:25px;
+}
+#emailS input:focus + label{
+  color:var(--primary);
+}
+#emailS input:focus{
+  border-bottom:2px solid var(--primary);
+  box-shadow: 0 1px 0 0 var(--primary);
+}
+#emailS input:focus + label + #validS{
+  animation:error 0.3s linear 2;
+} 
+#msgS{
+  margin-bottom:25px;
+}
+#msgS textarea:focus + label{
+  color:var(--primary);
+}
+#msgS textarea:focus{
+  border-bottom:2px solid var(--primary);
+  box-shadow: 0 1px 0 0 var(--primary);
+}
 /*Navigation*/
 nav{
   position:fixed;
@@ -120,6 +219,11 @@ nav .nav-wrapper .brand-logo span{
   font-size:0.7em;
   top:-3px;
 }
+nav .nav-wrapper .search #search{
+  width:100%;
+  box-sizing:border-box;
+  padding-right:56px;
+} 
 .sidenav #accountSection{
   display:none;
 }
@@ -137,7 +241,7 @@ nav .nav-wrapper .brand-logo span{
 .nav-icon:after, 
 .nav-icon:before, 
 .nav-icon div {
-  background-color:rgba(255,255,255,.7);
+  background-color:rgba(255,255,255,1);
   content: '';
   display: block;
   height: 3px;
@@ -217,7 +321,7 @@ main{
 .ct .lblShow i{
   color:#fff;
   margin-top:-2px;
-  transition:transform 0.7s ease;
+  transition:transform 0.3s ease;
   float:right;
 }
 .ct .lblShow span:nth-child(3){
@@ -274,8 +378,8 @@ main{
   font-weight:500;
   font-size:1.4em;
   text-transform:uppercase;
+  font-weight:500;
 }
-
 .feed .card-content .card-title {
   margin:0;
   line-height:20px;
@@ -285,7 +389,8 @@ main{
  line-height:19px;
  overflow-wrap: break-word;
  font-size:1.37em;
- font-weight:300;
+ font-weight:350;
+ color:#777;
 }
 .feed .card-content a{
   color:var(--primary);
@@ -296,42 +401,93 @@ main{
 .feed .card-action{
   width:100%;
   margin:0;
-  box-sizing:border-box;
-  padding-top:10px;
-  padding-bottom:10px;
-  padding-left:21px;
+  display:flex;
+  justify-content:space-between;
+  padding:0;
+  position:relative;
+  z-index:2;
 } 
 .feed .card-action a i{
   position:relative;
   top:07px;
 }
-.feed .card-action a{
-  position:relative;
-  top:-4px;
+.feed .card-action a{ 
   color:var(--primary)!important;
   font-size:0.95em;
+  padding:10px 25px 15px 25px;
+  margin:0!important;
 }
-.feed .card-image .halfway-fab{
+.feed .card-action a .waves-ripple {
+  background-color:var(--primary);
+}        
+.feed .card-content .shareBtns{
  z-index:9;
  margin-right:-5px;
  height:45px;
  width:45px;
  padding-top:3px;
+ position:absolute;
+ right:25px;
+ top:-20px;
+}
+.feed .card-content .shareBtns .waves-ripple{
+  background-color:var(--secondary);
 } 
-.feed .card-image .halfway-fab i{
+.feed .card-content .shareBtns i{
   color:var(--secondary);
   font-size:1.5em;
 }
 .feed .card-image{
   height:150px;
+  -webkit-background-size: cover;
+  -moz-background-size: cover;
+  -o-background-size: cover;
+  background-size: cover;
 }
-.feed .card-image::before{
-  content:'' ;
-  position:absolute ;
+#materialbox-overlay{
+  position:fixed;
+  z-index:1000;
+  width:100%;
+  height:100vh;
   top:0;
   left:0;
-  z-index:2;
-  width:100%;
-  height:100%;
-  background:rgba(0,0,0,.1);
 }
+#loadText{
+ text-transform:uppercase;
+ color:#fff;
+ font-size:1.2em;
+}
+#ldContainer{
+  position:fixed;
+  top:50%;
+  left:50%;
+  transform:translate(-50%,-50%) scale(0,0);
+  z-index:1002;
+  opacity:0;
+  transition:opacity 0.3s ease;
+} 
+.ct .progress{
+  background:transparent;
+  width:100px;
+}
+.ct .progress div{
+  background:#fff;
+} 
+/* "!IMPORTANT" TO BREAK JAVASCRIPT */
+.feed .card-image .materialboxed{
+  width:100%;
+  position:relative;
+  z-index:1;
+  height:auto!important;
+  opacity:0;
+}
+.feed .card-image .active{
+  position:fixed!important;
+  top:50%!important;
+  left:50%!important; 
+  transform:translate(-50%, -50%)!important;
+  z-index:1003!important;
+}
+.materialbox-caption{
+  z-index:1000;
+} 

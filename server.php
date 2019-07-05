@@ -1,8 +1,12 @@
 <?php
+//Conection
 include 'simple_html_dom.php';
 $db = mysqli_connect("localhost", "root", "M15@.transito", "powerpen") ;
 mysqli_set_charset($db,"utf8");
+//Functions manager
 $func = $_POST['func'];
+
+//Feed request
   function loadContent() {
     $ch = curl_init();
 	curl_setopt($ch, CURLOPT_URL, "https://portal.ingenieria.usac.edu.gt/");
@@ -15,7 +19,7 @@ $func = $_POST['func'];
 	$html->load($response);
 	if($state == 200){
     	foreach($html->find('.bt-inner') as $i=>$link){
-    		if ($i == 6) echo '<input type="checkbox" id="showContent" /><label class="lblShow" for="showContent"><span>Mostrar</span> <span>más</span><span>menos</span> <i class="material-icons">expand_more</i></label><div class="clp">'; 
+    		if ($i == 5) echo '<div id="ldContainer"><span id="loadText">Cargando ...</span><div class="progress"><div class="indeterminate"></div></div></div><input type="checkbox" id="showContent" /><label class="lblShow waves-effect waves-dark" for="showContent"><span>Mostrar</span> <span>más</span><span>menos</span> <i class="material-icons">expand_more</i></label><div class="clp">'; 
 			echo '<news-feed link="https://portal.ingenieria.usac.edu.gt'.$link->children(0)->children(0)->href.'" cache="'.$link->children(0)->children(0)->children(0)->src.'" title="'.str_replace("<br/>", " ", substr($link->children(1), 26, -6)).'" img="http://portal.ingenieria.usac.edu.gt/images/'.substr($link->children(0)->children(0)->children(0)->src, strpos($link->children(0)->children(0)->children(0)->src,"-")+1, -1).'g"></news-feed>';
     	}
     	echo "</div><span id='rights'>Todos los derechos reservados<br/>Desarrollado por AlexSantos 2019®</span>";
@@ -26,6 +30,7 @@ $func = $_POST['func'];
 }
 if($func == 'on') loadContent();
 
+//Search Item request
 if($func == 'search') {
 	$vals = $_POST['vals'];
 	$chs = curl_init('http://mate.ingenieria.usac.edu.gt/search_parameters.php');
@@ -36,26 +41,38 @@ if($func == 'search') {
 	$state = curl_getinfo($chs)['http_code'];
 	$html = new simple_html_dom();
 	$html->load($resp);
+	
 	if($state == 200){
-    foreach($html->find('[style="color:#000000"]') as $key=>$link){
-		if($key > 1 && $key % 2 == 0 && $key < sizeof($html->find('[style="color:#000000"]'))-1){
-			$a = $link->children[0]->children[0]->children[0];
-			$descr = $link->children[1];
-			$dates =  $link->children[3];
-		    echo '<file name="'.substr($a, strpos($a,">")+1,-4).'" desc="'.substr($descr, 20,-5).'" total="'.substr($dates, 20,-5).'" link="http://mate.ingenieria.usac.edu.gt/'.$a->href.'"></file>';
-        }} 
-    }else{
-    	http_response_code(408);
-    }
+    	foreach($html->find('[style="color:#000000"]') as $key=>$link){
+			if($key > 1 && $key % 2 == 0 && $key < sizeof($html->find('[style="color:#000000"]'))-1){
+				$a = $link->children[0]->children[0]->children[0];
+				$descr = $link->children[1];
+				$dates =  $link->children[3];
+		    	echo '<file name="'.substr($a, strpos($a,">")+1,-4).'" desc="'.substr($descr, 20,-5).'" total="'.substr($dates, 20,-5).'" link="http://mate.ingenieria.usac.edu.gt/'.$a->href.'"></file>';
+        	}
+      	} 
+    }else http_response_code(408);
+    
 	curl_close($chs);
 } 
 
+//Files request
 if($func == 'files') {	
 	$dirs = mysqli_query($db, "SELECT * FROM files ORDER BY id DESC");
 	while($file=mysqli_fetch_array($dirs))
 		echo '<note link="./files/'.$file[5].'" name="'.$file[1].'" desc="'.$file[2].'" img="./img/'.$file[4].'" total="'.$file[3].'"></note>' ; 
 }
-
+//Send email 
+if($func == 'email') {
+  $from = $_POST['name'] ;
+  $to = "blobysoftware@gmail.com";
+  $subject = "FIUSAC (Helper) | Comments";
+  $message = $_POST['msg'] ;
+  $headers = "From:" . $from;
+  $dataEm = mail($to,$subject,$message, $headers);
+  if($dataEm) echo "successfully";
+  else echo "error";
+} 
+//Close connection
 mysqli_close($db);
- 
 ?>

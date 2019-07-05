@@ -1,3 +1,4 @@
+//Register service worker
 let deferredPrompt;
 const addBtn = document.querySelector('.add-button');
 addBtn.style.display = 'none';
@@ -29,8 +30,8 @@ function notifyMe(msg, body) {
     navigator.serviceWorker.getRegistration().then((reg) =>{
       var options = {
         body: body,
-        badge:"./img/logoN.png",
-        icon: './img/iconN.png',
+        badge:"./img/logo.png",
+        icon: './img/icon.png',
         actions:[{title:"Ver noticia", action:"showFeed"}], 
         vibrate: [100, 50, 100],
         data: {
@@ -55,10 +56,12 @@ if (navigator.share) {
     .then(() => console.log('Successful share'))
     .catch((error) => console.log('Error sharing', error));
 }
-}) 
-//Toolbar
+})
+
+//toolbar
 var btn = document.querySelectorAll('.fixed-action-btn');
-var instances = M.FloatingActionButton.init(btn);
+var toolbar = M.FloatingActionButton.init(btn);
+
 //Navigations
 const side = () => navicon.click();
 let navToggle = true;
@@ -79,9 +82,13 @@ navicon.addEventListener('click', () =>{
 	} 
 })
 
-search.addEventListener('click', () => navicon.style.display='none');
+search.addEventListener('click', () => {
+	navicon.style.display='none'
+	setTimeout(() => search.childNodes[1].setAttribute("placeholder", "Buscar"), 100);
+});
 search.childNodes[1].addEventListener('focusout', e => {
 	e.target.value = "";
+	e.target.setAttribute("placeholder", " ");
 	navicon.style.display='block';	
 	shadow.style.opacity=0;
 	setTimeout(() => shadow.style.display="none", 300)
@@ -98,7 +105,7 @@ function general(el, rel) {
 	feedsBtn.classList.remove("active");
 	resBtn.classList.remove("active");
 	homeBtn.classList.remove("active");
-	el.classList.add("active");
+	setTimeout(() => el.classList.add("active"), 10);
 	rel.click();
 }
 
@@ -113,9 +120,20 @@ function addEvents() {
   		if(url == 'noticias') feedsBtn.click();
   		if(url == 'recursos') resBtn.click();
 	}
-} 
+}
+
 //Developer
-eruda.init()
+//eruda.init()
+/*function getRandomRGBValue() { return Math.min(Math.floor(Math.random() * 255 + 1), 255); }
+function getR() {
+    var r = getRandomRGBValue(),
+        g = getRandomRGBValue(),
+        b = getRandomRGBValue();
+    return "#" + (((1 << 24) + (r << 16) + (g << 8) + b).toString(16).slice(1));
+}*/
+//Color splash
+//setInterval(() => updateColor(getR(), getR()), 2000);
+
 // Search
 let searchAll = document.querySelector(".search");
 let shadow = document.getElementById("searchShadow");
@@ -125,16 +143,43 @@ searchAll.addEventListener("click", () =>{
 	setTimeout(() => shadow.style.opacity=1, 10)
 })
 
-function getRandomRGBValue() {
-    return Math.min(Math.floor(Math.random() * 255 + 1), 255);
-}
+//Actions buttons
+let eBtn = document.querySelector(".eBtn");
+let mailBox = document.getElementById("mailBox");
+let email = document.getElementById("email");
+let textarea = document.getElementById("textarea1");
+let shadowS = document.getElementById("shadowS");
+let sendBtn = document.querySelector('.sendBtn');
 
-function getR() {
-    var r = getRandomRGBValue(),
-        g = getRandomRGBValue(),
-        b = getRandomRGBValue();
-    return "#" + (((1 << 24) + (r << 16) + (g << 8) + b).toString(16).slice(1));
+function fadeInMail() {
+	mailBox.style.display="block";
+	textarea.value="";
+	textarea.style.height="42px";
+	email.value="";
+	email.focus();
+	setTimeout(() =>{
+		textarea.focus();
+		mailBox.style.opacity=1;
+	}, 10);
 }
+function fadeOutMail() {
+	mailBox.style.opacity=0;
+	setTimeout(() =>{
+		mailBox.style.display="none";
+	}, 300);
+} 
+eBtn.addEventListener('click', () => fadeInMail() );
+shadowS.addEventListener('click', () => fadeOutMail());
 
-//Color splash
-//setInterval(() => updateColor(getR(), getR()), 2000);
+// Send Emails 
+sendBtn.addEventListener('click', () =>{
+	if(email.checkValidity() && email.value.length > 0){
+	   send({
+	   		func:'email', 
+	   		name:email.value,
+	   		msg:textarea.value
+	   }, (data) => fadeOutMail() );
+	}else if(email.value.length <= 0){
+	  email.focus();
+	} 
+}) 

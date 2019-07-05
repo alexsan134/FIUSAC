@@ -67,7 +67,7 @@
 				<li><a href="#!/recursos">Recursos</a></li>
 			</ul>			
 			<div class="input-field search">
-				<input id="search" type="search" required>
+				<input id="search" type="search" placeholder="">
 				<label class="label-icon" for="search"><i class="material-icons">search</i></label>
 				<i class="material-icons">close</i>
 			</div>			
@@ -84,7 +84,7 @@
 				</a>
 				<a role="button" class="userInfo">
 					<span class="name bold">FIUSAC (Helper)</span>
-					<span class="email white-text">AlexSantos 2019®</span>
+					<span class="email white-text">Version beta v0.67</span>
 				</a>
 			</div>
 		</li>
@@ -139,16 +139,16 @@
 	</ul> 
 	<div class="nav-icon"><div></div></div>
 <!-- USER INTERACTION -->
-	<div class="progress">
-			<div class="indeterminate"></div>
+	<div class="progress" id="mainLoader">
+		<div class="indeterminate"></div>
 	</div>
 	<div class="fixed-action-btn action ">
 		<a class="btn-floating btn-large waves-effect">
 			<i class="large material-icons">add</i>
 		</a>
 	<ul>
-		<li><a class="btn-floating"><i class="material-icons">color_lens</i></a></li>
-		<li><a class="btn-floating"><i class="material-icons">email</i></a></li>
+		<li><a class="btn-floating eColor"><i class="material-icons">color_lens</i></a></li>
+		<li><a class="btn-floating eBtn"><i class="material-icons">email</i></a></li>
      </ul>
 	</div>
   	<div id="searchShadow"></div>
@@ -158,12 +158,22 @@
 		<router-link to="/recursos"><a class="rRes"></a></router-link>	
 		<router-view></router-view>
 	</main>
-<!-- SEARCH BOX -->
-	<section id="searchBox" class="ct" style="display:none">
-		<div class="banner">
-			<h5 style="font-weight:bold;color:#000;margin:0;">
-				<i class="material-icons">info_outline</i> Resultados de búsqueda</h5>
-			<p>Aqui se mostrarán los resultados de relacionados con <span id="searchKeyword"></span> obtenidos del <a href="ingenieria.usac.edu.gt">Departamento de matemática</a></p>
+<!-- MAIL BOX -->
+	<section id="mailBox">
+		<div id="shadowS"></div>
+		<div class="boxed">
+		<a role="button" class="sendBtn waves-effect"><i class="material-icons">send</i></a>
+		<h5><i class="material-icons">email</i> Para desarrolladores:</h5>
+		<div class="input-field col s12" id="emailS">
+			<input id="email" type="email" class="validate">
+			<label for="email">Correo electrónico</label>
+			<span id="validS" class="helper-text" data-error="Inválido" data-success="Válido">* Campo obligatorio.</span>
+		</div>
+		<div class="input-field col s12" id="msgS">
+			<textarea id="textarea1" class="materialize-textarea"></textarea>
+			<label for="textarea1">Mensaje</label>
+			<span class="helper-text">Comentarios o preguntas.</span>
+		</div>
 		</div>
 	</section>	
 <!-- SCRIPTS -->

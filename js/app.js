@@ -10,10 +10,35 @@ String.prototype.replaceAll = function(search, replacement) {
 const loader = document.querySelector(".progress");
 const openLoader = e => loader.style.opacity=1;
 
+
 //News feed component
 Vue.component("news-feed",{
   props:['title', 'link', 'img', 'cache', 'sclass'],
   data:function (){
+  setTimeout(() =>{
+    let loader = document.getElementById("ldContainer");
+  	var imgS = document.querySelectorAll('.materialboxed');
+  	var media = M.Materialbox.init(imgS, {
+  	onOpenStart: function(e){
+  		e.style.transition="unset";
+  		loader.style.transform="translate(-50%,-50%) scale(1,1)";
+  		loader.style.opacity=1;
+  		setTimeout(() =>{
+  			e.style.transition="opacity 0.3s";
+  			e.style.opacity=1;
+  		},300) ;
+  	},
+  	onCloseStart: function(e){ 	
+  		e.style.transition="unset";
+  		e.style.opacity=0;
+  		loader.style.transform="translate(-50%,-50%) scale(0,0)";
+  		loader.style.opacity=0;
+  	},
+  	onCloseEnd:function(e) {
+  		e.style.opacity=0;
+  	} 
+  	});
+ 	}, 10);
    let title = this.title;
    let fixedTitle = title.replace(/&amp;nbsp;/gi, "").replaceAll("&lt;br /&gt;", "").replaceAll("<br />", "").replaceAll("&nbsp;", "");
    let nlink = fixedTitle.substr(fixedTitle.indexOf("htt"));
@@ -21,6 +46,9 @@ Vue.component("news-feed",{
    return { fixedTitle, nlink } 
   }, 
   methods:{
+    setBack(cache){
+      return `background-image:url(${cache})`
+    }, 
     remPrepos(str){
       let prepos = ['a', 'ante', 'bajo', 'con', 'de', 'del', 'desde', 'durante', 'en', 'entre', 'excepto', 'hacia', 'hasta', 'mediante', 'para', 'por', 'salvo', 'según', 'sin', 'sobre', 'tras'];
       let word = str.split(" ").slice(1,  3);
@@ -36,23 +64,12 @@ Vue.component("news-feed",{
       }
     } 
   }, 
-  template: '<div class="row feed" v-bind:class=sclass><div class="col s12 m7"><div class="card"><div class="card-image"><img v-bind:src=cache><a v-on:click="shareBtn(link, title)" class="btn-floating halfway-fab waves-effect waves-dark white"><i class="material-icons">share</i></a></div><div class="card-content"><span class="card-title">{{ remPrepos(fixedTitle) }}</span><p>{{ fixedTitle }} <a v-bind:href=nlink>{{ nlink }}</p></div><div class="card-action waves-effect"><a download v-bind:href=img onclick="openLoader()"><i class="material-icons">arrow_downward</i> DESCARGAR</a><a v-bind:href=link onclick="openLoader()"><i class="material-icons">collections</i> VER NOTICIA</a></div></div></div></div>'
+  template: '<div class="row feed" v-bind:class=sclass><div class="col s12 m7"><div class="card"><div class="card-image" v-bind:style="setBack(cache)" ><img v-bind:src=img class="materialboxed" v-bind:data-caption="remPrepos(fixedTitle)"></div><div class="card-content"><a v-on:click="shareBtn(link, title)" class="btn-floating shareBtns waves-effect waves-dark white"><i class="material-icons">share</i></a><span class="card-title">{{ remPrepos(fixedTitle) }}</span><p>{{ fixedTitle }} <a v-bind:href=nlink>{{ nlink }}</p></div><div class="card-action"><a class="waves-effect" v-bind:href=link onclick="openLoader()"><i class="material-icons">collections</i> VER NOTICIA</a><a download class="waves-effect" v-bind:href=img onclick="openLoader()"><i class="material-icons">arrow_downward</i> DESCARGAR</a></div></div></div></div>'
 } 
 )
 // Banner  component
 Vue.component("note", {
   props:["name", "desc", "img", "total", "link" ], 
-  methods:{
-  	shareBtn(str, title, txt) {
-  		if (navigator.share) {
-  			navigator.share({
-  				title: title ,
-  				text: txt,
-  				url: str
-  			})
-  		}
-  	} 
-  },
   template:'<div class="col s12 file hoverable"><div class="card horizontal"><div class="card-image"><img v-bind:src=img></div><div class="card-stacked"><div class="card-content"> <h6>{{ name }}</h6><p>{{ desc }}</p><p>({{ total }})</p></div><div class="card-action waves-effect"><span class="material-icons shareCircle" v-on:click="shareBtn(link, name, desc)">share</span><a download v-bind:href=link class="white-text" ><i class="material-icons">arrow_downward</i>Descargar</a> </div> </div> </div> </div>'
 })
 // Files component
@@ -60,18 +77,26 @@ Vue.component("file", {
   props:["name", "desc", "total", "link" ], 
   template:'<div class="col s12 hoverable dep"><div class="card horizontal"><div class="card-stacked"><div class="card-content"> <h6>{{ name }}</h6> <span>{{ desc }}</span><p>({{ total }})</p></div><div class="card-action waves-effect"><span class="material-icons shareCircle white">share</span><a download v-bind:href=link class="white-text" ><i class="material-icons">arrow_downward</i>Descargar</a> </div> </div> </div> </div>'
 })
-
 //Vue Router
 let feeds, res, home, router, app;
 let routes = [];
 
 function setRouter(){
-	router = new VueRouter({routes})
+	router = new VueRouter({routes});
  	app = new Vue({
  		el:'#app', 
  		router
  	})
 }
+
+//Reload localstorage data
+if(new Date().getDate().toString() !== window.localStorage.getItem("day")){
+ window.localStorage.removeItem("feeds");
+ window.localStorage.removeItem("res");
+ window.localStorage.removeItem("day");
+ window.localStorage.setItem("day", new Date().getDate());
+}
+
 //Feed and Files component
 const loadFeeds = data => routes.push({ path: '/noticias', component: { template: '<fragment><div class="feeds ct"><div class="banner"><h5 style="font-weight:500;color:#000;margin:0;" ><i class="material-icons">info_outline</i> Portal de Facultad</h5><p>Aqui se mostrarán noticias recientes, disponibles para compartir y descargar que se obtenienen únicamente del <a href="ingenieria.usac.edu.gt">Portal de Ingeniería</a></p></div>'+data+'</div></fragment>'} });
 const loadFiles = data => routes.push({ path: '/recursos', component: { template: '<fragment><div class="res ct"><div class="banner"><h5 style="font-weight:500;color:#000;margin:0;" ><i class="material-icons">info_outline</i> Recursos Académicos</h5><p>Aqui se mostrarán documentos, tareas, parciales y contenido académico, también descargables desde aqui: <a href="ingenieria.usac.edu.gt">Google Drive</a></p></div>'+data+'</div></fragment>'} });
@@ -95,12 +120,4 @@ if(window.localStorage.getItem("feeds") !== null){
     		addEvents();
     	});
     });
-}
-
-//Reload localstorage data
-if(new Date().getDate().toString() !== window.localStorage.getItem("day")){
- window.localStorage.removeItem("feeds");
- window.localStorage.removeItem("res");
- window.localStorage.removeItem("day");
- window.localStorage.setItem("day", new Date().getDate());
 }
